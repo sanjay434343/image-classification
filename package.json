@@ -1,0 +1,16 @@
+{
+  "name": "vercel-image-analyzer",
+  "version": "1.0.0",
+  "description": "Vercel API for image analysis and AI prompt generation",
+  "main": "api/analyze.js",
+  "type": "module",
+  "scripts": {
+    "start": "vercel dev"
+  },
+  "dependencies": {
+    "node-fetch": "^3.3.2"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
