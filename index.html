@@ -4,68 +4,424 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CleanURI URL Shortener</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: system-ui, sans-serif;
-      background: #0d1117;
-      color: #e6edf3;
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 600px;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 28px;
+      padding: 40px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    }
+
+    h1 {
+      color: #1a1a1a;
+      font-size: 32px;
+      font-weight: 500;
+      margin-bottom: 8px;
       text-align: center;
-      padding: 50px;
     }
-    input {
-      padding: 10px;
-      width: 60%;
-      border: none;
-      border-radius: 8px;
+
+    .subtitle {
+      color: #5f6368;
+      font-size: 14px;
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .input-container {
+      position: relative;
+      margin-bottom: 24px;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 16px 48px 16px 16px;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      font-size: 16px;
       outline: none;
+      transition: all 0.3s ease;
+      font-family: 'Roboto', sans-serif;
     }
-    button {
-      padding: 10px 16px;
+
+    .input-field:focus {
+      border-color: #667eea;
+      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    }
+
+    .clear-btn {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
       border: none;
-      border-radius: 8px;
-      margin-left: 8px;
-      background: #238636;
-      color: white;
+      color: #5f6368;
       cursor: pointer;
+      padding: 8px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
     }
-    button:hover {
-      background: #2ea043;
+
+    .clear-btn:hover {
+      background: #f1f3f4;
     }
+
+    .btn-primary {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
     .result {
-      margin-top: 20px;
-      font-size: 1.2em;
+      margin-top: 24px;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 12px;
+      display: none;
     }
-    a {
-      color: #58a6ff;
+
+    .result.show {
+      display: block;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .result-url {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .result-url a {
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 500;
+      word-break: break-all;
+      flex: 1;
+    }
+
+    .icon-btn {
+      background: #667eea;
+      border: none;
+      color: white;
+      padding: 8px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .icon-btn:hover {
+      background: #5568d3;
+    }
+
+    .error {
+      color: #d93025;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .history {
+      margin-top: 32px;
+      padding-top: 32px;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .history-title {
+      font-size: 18px;
+      font-weight: 500;
+      color: #1a1a1a;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .clear-history {
+      background: none;
+      border: none;
+      color: #d93025;
+      cursor: pointer;
+      font-size: 14px;
+      padding: 4px 12px;
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+
+    .clear-history:hover {
+      background: #fce8e6;
+    }
+
+    .history-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+
+    .history-item a {
+      color: #667eea;
+      text-decoration: none;
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .empty-state {
+      text-align: center;
+      color: #5f6368;
+      padding: 20px;
+      font-size: 14px;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #323232;
+      color: white;
+      padding: 14px 24px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease;
+      z-index: 1000;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
     }
   </style>
 </head>
 <body>
-  <h1>CleanURI Shortener</h1>
-  <input type="text" id="urlInput" placeholder="Enter your long URL">
-  <button onclick="shorten()">Shorten</button>
-  <div id="result" class="result"></div>
+  <div class="container">
+    <div class="card">
+      <h1>CleanURI</h1>
+      <p class="subtitle">Shorten your URLs instantly</p>
+
+      <div class="input-container">
+        <input type="text" id="urlInput" class="input-field" placeholder="Enter your long URL">
+        <button class="clear-btn" onclick="clearInput()" style="display: none;">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+
+      <button class="btn-primary" onclick="shorten()">
+        <span class="material-icons">link</span>
+        Shorten URL
+      </button>
+
+      <div id="result" class="result"></div>
+
+      <div class="history">
+        <div class="history-title">
+          <span>Recent URLs</span>
+          <button class="clear-history" onclick="clearHistory()">Clear All</button>
+        </div>
+        <div id="historyList"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
 
   <script>
-    async function shorten() {
-      const url = document.getElementById("urlInput").value.trim();
-      const resultDiv = document.getElementById("result");
-      if (!url) return alert("Enter a valid URL");
+    const urlInput = document.getElementById("urlInput");
+    const clearBtn = document.querySelector(".clear-btn");
+    const resultDiv = document.getElementById("result");
+    const historyList = document.getElementById("historyList");
 
-      resultDiv.innerHTML = "Shortening...";
-      const res = await fetch("/api/shorten", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url })
-      });
+    // Show/hide clear button
+    urlInput.addEventListener("input", () => {
+      clearBtn.style.display = urlInput.value ? "flex" : "none";
+    });
 
-      const data = await res.json();
-      if (data.result_url) {
-        resultDiv.innerHTML = `<a href="${data.result_url}" target="_blank">${data.result_url}</a>`;
-      } else {
-        resultDiv.innerHTML = `❌ Error: ${data.error || "Failed to shorten"}`;
+    function clearInput() {
+      urlInput.value = "";
+      clearBtn.style.display = "none";
+      urlInput.focus();
+    }
+
+    // In-memory storage for the session
+    let urlHistory = [];
+
+    function loadHistory() {
+      displayHistory();
+    }
+
+    function saveToHistory(original, shortened) {
+      urlHistory.unshift({ original, shortened, timestamp: Date.now() });
+      if (urlHistory.length > 10) urlHistory.pop();
+      displayHistory();
+    }
+
+    function displayHistory() {
+      if (urlHistory.length === 0) {
+        historyList.innerHTML = '<div class="empty-state">No URLs shortened yet</div>';
+        return;
+      }
+
+      historyList.innerHTML = urlHistory.map(item => `
+        <div class="history-item">
+          <a href="${item.shortened}" target="_blank">${item.shortened}</a>
+          <button class="icon-btn" onclick="copyToClipboard('${item.shortened}')">
+            <span class="material-icons" style="font-size: 18px;">content_copy</span>
+          </button>
+        </div>
+      `).join('');
+    }
+
+    function clearHistory() {
+      if (confirm('Clear all shortened URLs?')) {
+        urlHistory = [];
+        displayHistory();
+        showToast('History cleared');
       }
     }
+
+    async function shorten() {
+      const url = urlInput.value.trim();
+      if (!url) {
+        showToast('Please enter a URL');
+        return;
+      }
+
+      resultDiv.className = 'result show';
+      resultDiv.innerHTML = '<div style="text-align: center; color: #5f6368;">Shortening...</div>';
+
+      try {
+        const res = await fetch("/api/shorten", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ url })
+        });
+
+        const data = await res.json();
+        
+        if (data.result_url) {
+          resultDiv.innerHTML = `
+            <div class="result-url">
+              <a href="${data.result_url}" target="_blank">${data.result_url}</a>
+              <button class="icon-btn" onclick="copyToClipboard('${data.result_url}')">
+                <span class="material-icons" style="font-size: 18px;">content_copy</span>
+              </button>
+            </div>
+          `;
+          saveToHistory(url, data.result_url);
+          showToast('URL shortened successfully!');
+        } else {
+          resultDiv.innerHTML = `
+            <div class="error">
+              <span class="material-icons">error</span>
+              ${data.error || "Failed to shorten URL"}
+            </div>
+          `;
+        }
+      } catch (error) {
+        resultDiv.innerHTML = `
+          <div class="error">
+            <span class="material-icons">error</span>
+            Network error. Please try again.
+          </div>
+        `;
+      }
+    }
+
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('Copied to clipboard!');
+      }).catch(() => {
+        showToast('Failed to copy');
+      });
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.innerHTML = `
+        <span class="material-icons" style="font-size: 20px;">check_circle</span>
+        ${message}
+      `;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+
+    // Enter key support
+    urlInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') shorten();
+    });
+
+    // Load history on page load
+    loadHistory();
   </script>
 </body>
 </html>
