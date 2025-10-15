@@ -1,16 +1,16 @@
 {
-  "name": "vercel-image-analyzer",
+  "name": "cleanuri-shortener",
   "version": "1.0.0",
-  "description": "Vercel API for image analysis and AI prompt generation",
-  "main": "api/analyze.js",
+  "description": "URL shortener using CleanURI API",
+  "main": "api/shorten.js",
   "type": "module",
   "scripts": {
     "start": "vercel dev"
   },
   "dependencies": {
-    "node-fetch": "^3.3.2"
+    "node-fetch": "^3.4.1"
   },
   "engines": {
-    "node": ">=18"
+    "node": "18.x"
   }
 }
