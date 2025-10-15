@@ -1,5 +1,3 @@
-import fetch from "node-fetch";
-
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Only POST allowed" });
@@ -9,6 +7,7 @@ export default async function handler(req, res) {
   if (!url) return res.status(400).json({ error: "Missing URL" });
 
   try {
+    // Native fetch in Node 22+
     const response = await fetch("https://cleanuri.com/api/v1/shorten", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
