@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CleanURI URL Shortener</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      background: #0d1117;
+      color: #e6edf3;
+      text-align: center;
+      padding: 50px;
+    }
+    input {
+      padding: 10px;
+      width: 60%;
+      border: none;
+      border-radius: 8px;
+      outline: none;
+    }
+    button {
+      padding: 10px 16px;
+      border: none;
+      border-radius: 8px;
+      margin-left: 8px;
+      background: #238636;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #2ea043;
+    }
+    .result {
+      margin-top: 20px;
+      font-size: 1.2em;
+    }
+    a {
+      color: #58a6ff;
+    }
+  </style>
+</head>
+<body>
+  <h1>CleanURI Shortener</h1>
+  <input type="text" id="urlInput" placeholder="Enter your long URL">
+  <button onclick="shorten()">Shorten</button>
+  <div id="result" class="result"></div>
+
+  <script>
+    async function shorten() {
+      const url = document.getElementById("urlInput").value.trim();
+      const resultDiv = document.getElementById("result");
+      if (!url) return alert("Enter a valid URL");
+
+      resultDiv.innerHTML = "Shortening...";
+      const res = await fetch("/api/shorten", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url })
+      });
+
+      const data = await res.json();
+      if (data.result_url) {
+        resultDiv.innerHTML = `<a href="${data.result_url}" target="_blank">${data.result_url}</a>`;
+      } else {
+        resultDiv.innerHTML = `❌ Error: ${data.error || "Failed to shorten"}`;
+      }
+    }
+  </script>
+</body>
+</html>
